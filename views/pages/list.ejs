@@ -1,0 +1,53 @@
+<%- include('../shared/header.ejs') %>
+
+  <main>
+    <h2><a href="/list">List of Entries</a></h2>
+
+    <form id="search-bar">
+      <input type="text" placeholder="Search...">
+      <button type="submit">Submit</button>
+    </form>
+
+    <h3 id="cat">Categories:</h3>
+      <ul>
+        <li><a href="/list/character">Character</a></li>
+        <li><a href="/list/item">Item</a></li>
+        <li><a href="/list/ability">Ability</a></li>
+      </ul>
+    <h3>Entries:</h3>
+      <ul>
+        <%_ for (const entry of characters) { _%>
+          <li><a href="/view/character/<%= entry.id %>"><%= entry.name %></a>: <%= entry.info %></li>
+        <%_ } _%>
+        <%_ for (const entry of items) { _%>
+          <li><a href="/view/item/<%= entry.id %>"><%= entry.name %></a>: <%= entry.info %></li>
+        <%_ } _%>
+        <%_ for (const entry of abilities) { _%>
+          <li><a href="/view/ability/<%= entry.id %>"><%= entry.name %></a>: <%= entry.info %></li>
+        <%_ } _%>
+        <%_ for (const entry of entries) { _%>
+          <li><a href="/view/<%= table %>/<%= entry.id %>"><%= entry.name %></a>: <%= entry.info %></li>
+        <%_ } _%>
+    </ul>
+    <%_ if (characters.length === 0 && items.length === 0 
+        && abilities.length === 0 && entries.length === 0) { _%>
+          <span style="color: darkred">No results</span>
+    <%_ } _%>
+
+  </main>
+  <script>
+    const baseUrl = 'http://localhost:5163'
+    const search = document.getElementById('search-bar')
+
+    search.addEventListener('submit', async (e) => {
+      e.preventDefault()
+      const text = search.querySelector('input').value
+
+      const url = new URL(`/list/search/${text}`, baseUrl)
+
+      // This redirects the client to the URL
+      window.location.href = url
+    }, false)
+  </script>
+</body>
+</html>
